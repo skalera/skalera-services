@@ -21,6 +21,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'airbrake', '~> 4'
   spec.add_dependency 'diplomat', '~> 0'
   spec.add_dependency 'redis', '~> 3'
+  spec.add_dependency 'sequel', '~> 4'
+  spec.add_dependency 'pg', '~> 0'
+  spec.add_dependency 'influxdb', '~> 0'
 
   spec.add_development_dependency 'bundler', '~> 1'
   spec.add_development_dependency 'rake', '~> 10'

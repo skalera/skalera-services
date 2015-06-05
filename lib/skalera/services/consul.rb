@@ -10,9 +10,9 @@ module Skalera
         Diplomat.configuration.acl_token = token if token
 
         # force a lookup just to make a connection so we can bail out early if consul id down
-        Diplomat.get(service_name)
+        Diplomat.get("services/#{service_name}")
       rescue Diplomat::KeyNotFound
-        Diplomat.put(service_name, service_name)
+        Diplomat.put("services/#{service_name}", service_name)
       rescue Faraday::ConnectionFailed => e
         STDERR.puts("ERROR: could not lookup host #{consul}")
         raise e

@@ -3,19 +3,20 @@ require 'redis'
 module Skalera
   module Services
     class Redis
-      def self.instance(service_name)
+      def self.instance(database=0)
         redis_config = Diplomat::Service.get('redis')
-        # TODO: fetch password and database from consul using service_name
-        options = { host: redis_config.Address, port: redis_config.ServicePort }
-        pwd = password(service_name)
+
+        options = { host: redis_config.Address, port: redis_config.ServicePort, database: database }
+        pwd = password
         options[:password] = pwd if pwd
+
         redis = ::Redis.new(options)
         at_exit { redis.quit }
         redis
       end
 
-      def self.password(service_name)
-        Diplomat.get("#{service_name}/redis/password")
+      def self.password
+        Diplomat.get('redis/password')
       rescue Diplomat::KeyNotFound
         nil
       end

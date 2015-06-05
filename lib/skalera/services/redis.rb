@@ -6,13 +6,14 @@ module Skalera
       def self.instance(database=0)
         redis_config = Diplomat::Service.get('redis')
 
-        options = { host: redis_config.Address, port: redis_config.ServicePort, database: database }
-        pwd = password
-        options[:password] = pwd if pwd
-
-        redis = ::Redis.new(options)
+        redis = ::Redis.new(url: url(password, redis_config.Address, redis_config.ServicePort, database))
         at_exit { redis.quit }
         redis
+      end
+
+      def self.url(password, host, port, database)
+        pwd = password ? "#{password}:" : ''
+        "redis://#{pwd}#{host}:#{port}/#{database}"
       end
 
       def self.password

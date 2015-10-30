@@ -33,4 +33,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov', '~> 0'
   spec.add_development_dependency 'simplecov-json', '~> 0'
   spec.add_development_dependency 'simplecov-rcov', '~> 0'
+  spec.add_development_dependency 'rspec_junit_formatter', '~> 0'
 end

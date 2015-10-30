@@ -14,8 +14,13 @@ Skalera::Services.bootstrap(SERVICE_NAME)
 begin
   # run your stuff here...
   influx = Skalera::Services::InfluxDB.instance('metrics')
+  puts influx
   redis = Skalera::Services::Redis.instance
+  puts redis
   DB = Skalera::Services::Postgres.instance('postgres')
+  Skalera::Services::Credentials.for('vcenter') do |host, user, password|
+    puts "#{host} / #{user} / #{password}"
+  end
 rescue => e
   STDERR.puts("#{e.class.name}: #{e.message}")
   STDERR.puts(e.backtrace)

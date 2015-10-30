@@ -20,6 +20,7 @@ module Skalera
         Diplomat.get(key_name(service_name))
       rescue Diplomat::KeyNotFound
         key = SecureRandom.hex(8)
+        # TODO: use logging
         puts "created errbit key '#{key}' for service '#{service_name}'"
         Diplomat::Kv.put(key_name(service_name), key)
       end

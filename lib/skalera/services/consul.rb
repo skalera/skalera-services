@@ -14,7 +14,12 @@ module Skalera
       rescue Diplomat::KeyNotFound
         Diplomat.put("services/#{service_name}", service_name)
       rescue Faraday::ConnectionFailed => e
+        # TODO: use logging
         STDERR.puts("ERROR: could not lookup host #{consul}")
+        raise e
+      rescue Faraday::ClientError => e
+        # TODO: use logging
+        STDERR.puts("ERROR: #{e}")
         raise e
       end
     end

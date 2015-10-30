@@ -3,7 +3,7 @@ require 'redis'
 module Skalera
   module Services
     class Redis
-      def self.instance(database=0)
+      def self.instance(database = 0)
         redis_config = Diplomat::Service.get('redis')
 
         redis = ::Redis.new(url: url(password, redis_config.Address, redis_config.ServicePort, database))

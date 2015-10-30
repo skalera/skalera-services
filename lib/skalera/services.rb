@@ -1,5 +1,6 @@
 require 'skalera/services/airbrake'
 require 'skalera/services/consul'
+require 'skalera/services/credentials'
 require 'skalera/services/errbit'
 require 'skalera/services/influxdb'
 require 'skalera/services/postgres'

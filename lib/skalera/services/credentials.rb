@@ -19,10 +19,13 @@ module Skalera
           yield host, username, password if block_given?
           [host, username, password]
         end.compact # in case there is an error
+      rescue Diplomat::KeyNotFound
+        STDERR.puts "ERROR: key not found: credentials/#{service_name}"
       end
 
       def self.extract(creds, key, field)
         result = {}
+        # TODO: handle errors when decoding the contents
         creds.select { |c| c[:key].match(%r{/#{field}$}) }.each do |hash|
           host = hash[:key].match(%r{#{key}/(.+)/#{field}})[1]
           result[host] = hash[:value]

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Skalera::Services::Controllers do
   before :all do
-    @consul = Service.new('consul', 'agent -server -bootstrap -data-dir data')
+    @consul = Service.new('consul', 'agent -dev -advertise 127.0.0.1')
     @consul.start
   end
 

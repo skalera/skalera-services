@@ -16,6 +16,6 @@ describe Skalera::Services::Credentials do
   end
 
   it 'handles missing service folder' do
-    expect { described_class.for('foo') { fail } }.to_not raise_error
+    expect { described_class.for('foo') { fail } }.to_not raise_error(Diplomat::KeyNotFound)
   end
 end

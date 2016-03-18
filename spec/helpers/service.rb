@@ -15,7 +15,8 @@ class Service
     # TODO: check that we can find the command (i.e. `which`)
     @tmpdir = Dir.mktmpdir
     command = [@command, @args].join(' ')
-    @pid = Process.spawn(command, out: :close, err: :close, in: :close, chdir: @tmpdir)
+    # @pid = Process.spawn(command, out: :close, err: :close, in: :close, chdir: @tmpdir)
+    @pid = Process.spawn(command, in: :close, chdir: @tmpdir)
     wait_until_running
   end
 

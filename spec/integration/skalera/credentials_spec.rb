@@ -11,8 +11,10 @@ describe Skalera::Services::Credentials do
   end
 
   it 'can add new credentials' do
-    described_class.add('service', 'host', 'username', 'password')
-    expect(described_class.for('service')).to eq([%w(host username password)])
+    described_class.add('service', 'host1', 'username1', 'password1')
+    described_class.add('service', 'host2', 'username2', 'password2')
+    expected = [%w(host1 username1 password1), %w(host2 username2 password2)]
+    expect(described_class.for('service')).to eq(expected)
   end
 
   it 'handles missing service folder' do

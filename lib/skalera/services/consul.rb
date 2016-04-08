@@ -9,7 +9,7 @@ module Skalera
         token = ENV['CONSUL_ACL_TOKEN']
         Diplomat.configuration.acl_token = token if token
 
-        # force a lookup just to make a connection so we can bail out early if consul id down
+        # force a lookup just to make a connection so we can bail out early if consul is down
         Diplomat.get("services/#{service_name}")
       rescue Diplomat::KeyNotFound
         Diplomat.put("services/#{service_name}", service_name)

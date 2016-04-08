@@ -3,8 +3,9 @@ require 'sequel'
 module Skalera
   module Services
     class Postgres
+      SERVICE_NAME = 'postgres'
       def self.instance(database)
-        postgres_config = Diplomat::Service.get('postgres')
+        postgres_config = Diplomat::Service.get(SERVICE_NAME)
 
         host = postgres_config.Address
         port = postgres_config.ServicePort
@@ -13,6 +14,8 @@ module Skalera
         db = ::Sequel.connect(url)
         at_exit { db.disconnect }
         db
+      rescue Diplomat::KeyNotFound
+        STDERR.puts "ERROR: service not found: #{SERVICE_NAME}"
       end
 
       def self.key(key)

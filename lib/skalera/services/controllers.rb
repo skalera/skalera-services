@@ -8,6 +8,8 @@ module Skalera
         host = extract(controllers, 'address')
         port = extract(controllers, 'port')
         [host['address'], port['port']]
+      rescue Diplomat::KeyNotFound
+        STDERR.puts "ERROR: key not found: controllers/#{controller_uuid}"
       end
 
       def self.extract(controllers, field)

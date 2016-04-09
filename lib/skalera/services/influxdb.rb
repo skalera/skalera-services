@@ -1,3 +1,4 @@
+require 'uri'
 require 'influxdb'
 
 module Skalera
@@ -5,15 +6,24 @@ module Skalera
     class InfluxDB
       SERVICE_NAME = 'influxdb-8086'
       def self.instance(database)
-        influxdb_config = Diplomat::Service.get(SERVICE_NAME)
+        url = ENV['SKALERA_INFLUXDB_URL']
+        if url
+          uri = URI(url)
+          host = uri.host
+          port = uri.port || '8086'
+          user = uri.user
+          password = uri.password
+        else
+          influxdb_config = Diplomat::Service.get(SERVICE_NAME)
+          host = influxdb_config.Address
+          port = influxdb_config.ServicePort
+          user = key('user')
+          password = key('password')
+        end
 
-        influxdb = ::InfluxDB::Client.new(database,
-                                          host: influxdb_config.Address,
-                                          port: influxdb_config.ServicePort,
-                                          user: key('user'),
-                                          password: key('password'))
-        # does not need an at_exit, as the influx clients takes care of it
-        influxdb
+        ::InfluxDB::Client.new(database, host: host, port: port, user: user, password: password)
+      rescue URI::InvalidURIError => e
+        STDERR.puts "ERROR: could not parse URL: #{e.message}"
       rescue Diplomat::KeyNotFound
         STDERR.puts "ERROR: service not found: #{SERVICE_NAME}"
       end

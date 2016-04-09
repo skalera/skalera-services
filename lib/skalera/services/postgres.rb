@@ -1,3 +1,4 @@
+require 'uri'
 require 'sequel'
 
 module Skalera
@@ -5,12 +6,20 @@ module Skalera
     class Postgres
       SERVICE_NAME = 'postgres'
       def self.instance(database)
-        postgres_config = Diplomat::Service.get(SERVICE_NAME)
+        if ENV['SKALERA_DB_URL']
+          url = ENV['SKALERA_DB_URL']
+        else
+          postgres_config = Diplomat::Service.get(SERVICE_NAME)
 
-        host = postgres_config.Address
-        port = postgres_config.ServicePort
+          uri = URI('postgres:/')
+          uri.host = postgres_config.Address
+          uri.port = postgres_config.ServicePort
+          uri.user = key('user')
+          uri.password = key('password')
+          uri.path = "/#{database}"
+          url = uri.to_s
+        end
 
-        url = "postgres://#{key('user')}:#{key('password')}@#{host}:#{port}/#{database}"
         db = ::Sequel.connect(url)
         at_exit { db.disconnect }
         db
